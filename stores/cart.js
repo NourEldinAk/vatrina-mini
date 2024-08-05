@@ -38,10 +38,10 @@ const cartSlice = createSlice({
             }
           },
           
-        deleteItem(state,action){
-            const {productId} = action.payload
-            state.items = state.items.filter(item => item.id !== productId)
-        }
+          deleteItem(state, action) {
+            const { productId } = action.payload;
+            state.items = state.items.filter(item => item.productId !== productId);
+          }
 
     }
 })
