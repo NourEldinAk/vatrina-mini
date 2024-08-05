@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axiosInstance'
 import Card from '../../components/Card'
 
-function page() {
+function Page() {
     const [products, setProducts] = useState([])
     useEffect(()=>{
         axios.get('/topCategories').then((response)=>{
@@ -35,4 +35,4 @@ function page() {
   )
 }
 
-export default page
+export default Page
