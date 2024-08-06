@@ -1,6 +1,6 @@
 'use client'
-import Card from '../components/Card'
-import Categories from '../components/Categories'
+import Card from './components/Card'
+import Categories from './components/Categories'
 import { useEffect, useState,createContext, useContext} from 'react';
 import axios from '../utils/axiosInstance'
 

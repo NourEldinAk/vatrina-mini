@@ -7,7 +7,7 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Price from './Price';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../stores/cart'
+import { addToCart } from '../../stores/cart'
 
 
 

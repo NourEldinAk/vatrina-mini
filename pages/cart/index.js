@@ -1,10 +1,10 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import EmptyCart from '@/components/EmptyCart'
-import CartItem from '@/components/CartItem'
+import EmptyCart from '@/pages/components/EmptyCart'
+import CartItem from '@/pages/components/CartItem'
 import {useSelector} from 'react-redux'
 
-function Page() {
+function CartPage() {
   const items = useSelector(store => store.cart.items)
   const [total, setTotal] = useState(0)
 
@@ -47,4 +47,4 @@ function Page() {
   )
 }
 
-export default Page
+export default CartPage

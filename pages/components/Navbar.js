@@ -6,7 +6,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,9 +17,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { useStyles } from '@/app/page';
 import { useState,useEffect } from 'react';
-import axios from '../utils/axiosInstance'
+import axios from '../../utils/axiosInstance'
 
 
 
@@ -167,8 +165,9 @@ console.log(styles)
       onClose={handleMobileMenuClose}
     >
 
-      <MenuItem onClick={handleClick}>
+      <MenuItem>
         <IconButton
+         onClick={handleClick}
           size="large"
           aria-label="show new notifications"
           color="inherit"
@@ -230,11 +229,12 @@ console.log(styles)
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
             <IconButton
+            onClick={handleClick}
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={items.length} color="error" onClick={handleClick}>
+              <Badge badgeContent={items.length} color="error" >
                 <ShoppingCartIcon></ShoppingCartIcon>
               </Badge>
             </IconButton>

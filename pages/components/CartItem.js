@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'; 
 import { useDispatch, useSelector } from 'react-redux';
-import test_products from '../utils/products'
+import test_products from '../../utils/products'
 import { decrementQty, incrementQty,deleteItem } from '@/stores/cart';
 
 

@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axiosInstance'
-import Card from '../../components/Card'
+import Card from '../components/Card'
 
 function Page() {
     const [products, setProducts] = useState([])
@@ -13,7 +13,7 @@ function Page() {
         }).catch((err)=>{
             console.error(err)
         })
-    },[])
+    },[products])
   return (
     <>
     <div className='mx-10 md:px-16 px-4 pb-10 mt-10' >
