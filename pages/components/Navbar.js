@@ -16,9 +16,10 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { addToCart } from '@/stores/cart';
 import { useState,useEffect } from 'react';
 import axios from '../../utils/axiosInstance'
+import { useSelector ,useDispatch} from 'react-redux';
 
 
 
@@ -96,8 +97,8 @@ export default function PrimarySearchAppBar() {
   useEffect(()=>{
 console.log(styles)
   },[styles])
-
   const items = useSelector(store=>store.cart.items)
+  const dispatch = useDispatch()
   const router = useRouter()
   const handleClick = ()=>{
     router.push('/cart')

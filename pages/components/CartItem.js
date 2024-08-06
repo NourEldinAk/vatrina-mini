@@ -10,8 +10,8 @@ import { decrementQty, incrementQty,deleteItem } from '@/stores/cart';
 
 function CartItem() {
   const products = useSelector(store => store.cart.items)
-
   const dispatch = useDispatch()
+
 
 
 
@@ -22,9 +22,12 @@ function CartItem() {
                         {products.map((product) => (
                           <li key={product.productId} className="md:flex flex-col md:flex-row  md:py-6 pb-6 mt-5 bg-[#ebecee] gap-12 rounded-md " >
                             <div className="h-24 w-24  flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img
-                                alt={product.image?.alt}
+                              <Image
+                                // alt={product.image?.alt}
+                                alt='image'
                                 src={product.image?.url}
+                                width={product.image?.width}
+                                height={product.image?.height}
                                 className="h-full w-full object-cover object-center"
                               />
                             </div>

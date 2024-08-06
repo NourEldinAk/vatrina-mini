@@ -7,13 +7,15 @@ import { Button, CardActionArea, CardActions } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Price from './Price';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../stores/cart'
+import { addToCart } from '@/stores/cart';
 
 
 
 export default function MultiActionAreaCard({id,price,title,discount,color,oldPrice,image}) {
 
+
   const dispatch = useDispatch()
+
   const handleAddToCart = ()=>{
     dispatch(addToCart({
       productId : id,
@@ -33,7 +35,7 @@ export default function MultiActionAreaCard({id,price,title,discount,color,oldPr
         height="200"
         width={image?.width || 240}
         image={image?.url}
-        alt={image?.alt}
+        alt={title}
       />
         ):(
           <CardMedia

@@ -13,7 +13,8 @@ export default function Categories({categories = []}) {
   <Image 
     src={category.image?.url} 
     className='rounded-md mb-4'
-    alt={category.image?.alt}
+    // alt={category.image?.alt}
+    alt='image'
     width={category.image?.width} 
     height={category.image?.height} 
     layout="responsive" 

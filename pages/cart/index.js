@@ -3,16 +3,21 @@ import React, { useEffect, useState } from 'react'
 import EmptyCart from '@/pages/components/EmptyCart'
 import CartItem from '@/pages/components/CartItem'
 import {useSelector} from 'react-redux'
+import { initializeCart } from '@/stores/cart'
+
 
 function CartPage() {
-  const items = useSelector(store => store.cart.items)
+  
+  const items = useSelector(store=> store.cart.items)
   const [total, setTotal] = useState(0)
 
   useEffect(()=>{
     let total =0;
      items.forEach(item => total += (item.price*item.quantity));
     setTotal(total)
-  },[total,items])
+  },[items])
+
+
   return (
     <div className='h-full w-full'>
       <div className='flex-col bg-[#f6f6f6] opacity-75 text-white md:w-[60%] mx-auto  mt-12 rounded-md py-6'>
