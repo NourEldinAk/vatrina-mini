@@ -4,9 +4,21 @@ import EmptyCart from '@/pages/components/EmptyCart'
 import CartItem from '@/pages/components/CartItem'
 import {useSelector} from 'react-redux'
 import { initializeCart } from '@/stores/cart'
+import Layout from '../components/Layout'
+import axios from 'axios'
+import { fetchStyles } from '@/utils/getStyles'
 
+export async function getServerSideProps() {
+  const {styles, siteName} = await fetchStyles()
+  return {
+    props:{
+      styles,
+      siteName
+    }
+  }
+}
 
-function CartPage() {
+function CartPage({styles,siteName}) {
   
   const items = useSelector(store=> store.cart.items)
   const [total, setTotal] = useState(0)
@@ -19,6 +31,8 @@ function CartPage() {
 
 
   return (
+    <Layout styles={styles} siteName={siteName}>
+
     <div className='h-full w-full'>
       <div className='flex-col bg-[#f6f6f6] opacity-75 text-white md:w-[60%] mx-auto  mt-12 rounded-md py-6'>
       <div className='mt-12  flex items-center'>
@@ -49,6 +63,7 @@ function CartPage() {
 
       </div>
     </div>
+    </Layout>
   )
 }
 

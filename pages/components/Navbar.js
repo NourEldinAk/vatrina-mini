@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -16,9 +14,6 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { addToCart } from '@/stores/cart';
-import { useState,useEffect } from 'react';
-import axios from '../../utils/axiosInstance'
 import { useSelector ,useDispatch} from 'react-redux';
 
 
@@ -69,43 +64,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
 
-  // const { styles, setStyles } = useStyles();
 
-  const [styles, setStyles] = useState({
-    primary: '',
-    background: '',
-    text: ''
-  });
+export default function PrimarySearchAppBar({styles,siteName}) {
+  // const { styles, siteName } = useStyle();
 
-  const [siteName, setSiteName] = useState("")
-
-  useEffect(() => {
-    axios.get('/styles')
-      .then(response => {
-        const { primary,background,text} = response.data.style.colors;
-        const site_name = response.data.site_name
-        setStyles({ primary,background,text }); 
-        setSiteName(site_name)
-      })
-      .catch(err => {
-        console.error('Error fetching styles:', err);
-      });
-  }, []);
-  
-  useEffect(()=>{
-console.log(styles)
-  },[styles])
   const items = useSelector(store=>store.cart.items)
-  const dispatch = useDispatch()
   const router = useRouter()
   const handleClick = ()=>{
     router.push('/cart')
   }
-  // const handleHomeClick = ()=>{
-  //   router.push('/')
-  // }
+
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -166,9 +135,8 @@ console.log(styles)
       onClose={handleMobileMenuClose}
     >
 
-      <MenuItem>
+      <MenuItem onClick={handleClick}      >
         <IconButton
-         onClick={handleClick}
           size="large"
           aria-label="show new notifications"
           color="inherit"

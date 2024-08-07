@@ -1,10 +1,8 @@
-// store.js
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage
-import cartReducer from "./cart"; // Update to your cart slice file path
+import storage from "redux-persist/lib/storage"; 
+import cartReducer from "./cart"; 
 
-// Configuration for redux-persist
 const persistConfig = {
   key: "root",
   storage,

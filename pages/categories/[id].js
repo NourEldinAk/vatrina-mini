@@ -3,7 +3,24 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axiosInstance'
 import ProductsSection from '@/pages/components/ProductsSection'
 import { useRouter } from 'next/router'
-function Category() {
+import Layout from '../components/Layout'
+import  { fetchStyles } from '../../utils/getStyles'
+
+
+
+
+
+export async function getServerSideProps() {
+  const {styles , siteName} =  await fetchStyles()
+  return {
+    props:{
+      styles,
+      siteName,
+    }
+  }
+}
+
+function Category({styles,siteName}) {
   const router = useRouter()
   const {id} = router.query
   const [Category, setCategory] = useState([])
@@ -25,8 +42,9 @@ function Category() {
 
   return (
     <>
-
+    <Layout styles={styles} siteName={siteName}>
     <ProductsSection title={Category.name} items={Category.products}/>
+    </Layout>
     </>
   )
 }
