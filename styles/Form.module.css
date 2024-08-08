@@ -1,0 +1,36 @@
+.fieldContainer {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  
+  .floatingLabel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1.25rem 0.5rem;
+    transition: all 0.2s;
+    pointer-events: none;
+    font-size: 1rem;
+    color: #999;
+  }
+  
+  .fieldContainer input:focus + .floatingLabel,
+  .fieldContainer textarea:focus + .floatingLabel,
+  .fieldContainer input:not(:placeholder-shown) + .floatingLabel,
+  .fieldContainer textarea:not(:placeholder-shown) + .floatingLabel {
+    top: -1rem;
+    right: 0.5rem;
+    font-size: 0.75rem;
+    color: #333;
+  }
+  
+  .fieldContainer input,
+  .fieldContainer textarea {
+    width: 100%;
+    padding: 1.75rem 0.5rem 0.8rem;
+    border-bottom: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: #ebebed;
+  }
+  

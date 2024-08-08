@@ -16,12 +16,12 @@ function CartItem() {
 
 
   return (
-<div className="mt-8">
+          <div className="mt-8">
                     <div className="flow-root px-10  h-full">
                       <ul role="list" className="">
                         {products.map((product) => (
                           <li key={product.productId} className="md:flex flex-col md:flex-row  md:py-6 pb-6 mt-5 bg-[#ebecee] gap-12 rounded-md " >
-                            <div className="h-24 w-24  flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                            <div className="h-24 w-24  flex-shrink-0 overflow-hidden rounded-md border border-gray-200 mr-3">
                               <Image
                                 // alt={product.image?.alt}
                                 alt='image'
@@ -32,8 +32,7 @@ function CartItem() {
                               />
                             </div>
 
-                            {/* Quantity function */}
-
+                            
                             <div className="ml-4 flex flex-1 flex-col">
                               <div>
                                 <div className="flex justify-between text-base font-medium text-gray-900">
@@ -47,7 +46,10 @@ function CartItem() {
                               
                               <div className="flex flex-1 items-end justify-between text-sm">
                                 <p className="text-gray-500">الكمية {product.quantity}</p>
-                                <div className="flex items-center">
+                               
+                          {/* Quantity function */}
+
+                           <div className="flex items-center">
                             <button
                               onClick={()=> dispatch(decrementQty({ productId: product.productId }))}
                               className="px-4 py-2 border rounded-l-md bg-gray-600 hover:bg-gray-300"
@@ -73,6 +75,7 @@ function CartItem() {
                                 </div>
                               </div>
                             </div>
+
                           </li>
                         ))}
                       </ul>

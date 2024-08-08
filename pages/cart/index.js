@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import EmptyCart from '@/pages/components/EmptyCart'
 import CartItem from '@/pages/components/CartItem'
 import {useSelector} from 'react-redux'
-import { initializeCart } from '@/stores/cart'
+import { initializeCart, selectCartTotal } from '@/stores/cart'
 import Layout from '../components/Layout'
 import axios from 'axios'
 import { fetchStyles } from '@/utils/getStyles'
+import Link from 'next/link'
 
 export async function getServerSideProps() {
   const {styles, siteName} = await fetchStyles()
@@ -21,13 +22,13 @@ export async function getServerSideProps() {
 function CartPage({styles,siteName}) {
   
   const items = useSelector(store=> store.cart.items)
-  const [total, setTotal] = useState(0)
+  const total = useSelector(selectCartTotal)
 
-  useEffect(()=>{
-    let total =0;
-     items.forEach(item => total += (item.price*item.quantity));
-    setTotal(total)
-  },[items])
+  // useEffect(()=>{
+  //   let total =0;
+  //    items.forEach(item => total += (item.price*item.quantity));
+  //   setTotal(total)
+  // },[items])
 
 
   return (
@@ -44,18 +45,18 @@ function CartPage({styles,siteName}) {
       <>
       <CartItem/>
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-      <div className="flex justify-between text-base font-medium text-gray-900">
+      <div className="flex justify-between text-base font-medium text-gray-900 px-10 my-6">
         <p>الاجمالي</p>
         <p>{total} د.ل</p>
       </div>
       <p className="mt-0.5 text-sm text-gray-500">سيتم حساب سعر التوصيل في الخطوة التالية</p>
       <div className="mt-6">
-        <a
-          href="#"
+        <Link
+          href="/checkout"
           className="flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:opacity-75"
         >
           تأكيد الشراء
-        </a>
+        </Link>
       </div>
       </div>
       </>

@@ -1,13 +1,10 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axiosInstance'
 import ProductsSection from '@/pages/components/ProductsSection'
 import { useRouter } from 'next/router'
 import Layout from '../components/Layout'
 import  { fetchStyles } from '../../utils/getStyles'
-
-
-
 
 
 export async function getServerSideProps() {
