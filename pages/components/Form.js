@@ -1,51 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import styles from '../../styles/Form.module.css';
+import axios from 'axios';
 
-const FormHandler = (params) => (
+
+
+const FormHandler = (params) => {
+    const [countryCodes, setCountryCodes] = useState([])
+
+    useEffect(()=>{
+        axios.get('https://restcountries.com/v3.1/all?fields=idd,name')
+        .then(response => {
+            const codes = response.data.map(country=>({
+                country: country.name.common,
+                code : `+${country.idd.root ? country.idd.root.replace('+',''): ''}${country.idd.suffixes ? country.idd.suffixes[0] : ''}`
+            })).filter(country=>country.code !== "+undefined")
+        
+            setCountryCodes(codes)
+        }).catch(err=>console.error(err))
+    },[])
+  return (
   <Formik
-    initialValues={{  name: '', phone: '', notes: '' }}
-    validate={values => {
-      const errors = {};
-      if (!values.name) {
-        errors.name = 'Required';
-      } else if (!values.phone) {
-        errors.phone = 'Phone Required';
-      }
-      return errors;
-    }}
-    onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+    initialValues={{ countryCode: '+218', phone: '', name: '', notes: '' }}
+    validationSchema={Yup.object({
+      phone: Yup.string().required('ادخل رقم الهاتف')
+      .min(9,'رقم الهاتف غير صحيح'),
+      name: Yup.string().required('ادخل الاسم الكامل')
+    })}
+    onSubmit={async (values, { setSubmitting, validateForm }) => {
+        const errors = await validateForm();
+        if (Object.keys(errors).length === 0) {
+          params.onNext(); 
+          console.log('Validation errors:', errors);
+        }
         setSubmitting(false);
-      }, 400);
-    }}
+      }}
   >
-    {({ isSubmitting }) => (
-      <Form className='flex flex-col md:w-1/2  gap-10 text-bold'>
+    {({ isSubmitting, values,touched,errors}) => (
+      <Form className='flex flex-col md:w-1/2  gap-4 text-bold text-black'>
         <div className={styles.fieldContainer} >
           <Field
             type="text"
             name="name"
-            className="px-2 py-4"
+            className="px-2 py-4 "
             placeholder=" "
           />
-          <label htmlFor="name" className={styles.floatingLabel}>الاسم الكامل</label>
-          <ErrorMessage name="name" component="div" />
+          <label htmlFor="name" style={touched.name && errors.name ? {color:'red'} :{ color:'black'}} className={`${styles.floatingLabel} `} >الاسم الكامل</label>
+          <ErrorMessage component="div" name='name' className='text-red-500 text-sm mt-1'></ErrorMessage>
+
         </div>
 
-        <div className={styles.fieldContainer}>
-          <Field
-            type="text"
-            name="phone"
-            className="px-2 py-4"
-            placeholder=" "
-          />
-          <label htmlFor="phone" className={styles.floatingLabel}>رقم الهاتف</label>
-          <ErrorMessage name="phone" component="div" />
+        <div className="">
+        <div className='flex items-center  text-black'>
+
+          <div className={`${styles.fieldContainer} w-3/4`}>
+            <Field
+              type="text"
+              name="phone"
+              className="px-2 py-4"
+              placeholder=" "
+              maxLength="11"
+            />
+            
+            <label htmlFor="phone" className={styles.floatingLabel} style={touched.phone && errors.phone ? {color:'red'} :{ color:'black'}} >رقم الهاتف</label>
+         
+          </div>
+          <div className={`${styles.fieldContainer} border-r-2 border-gray-300 w-1/4`}>
+            <Field as="select" name="countryCode" className="px-2 py-4">
+              {countryCodes.map((option) => (
+                <option key={option.code} value={option.code}>
+                  {option.country} ({option.code})
+                </option>
+              ))}
+            </Field>
+          </div>
+          </div>
+            <ErrorMessage component="div" name='phone'  className='text-red-500 text-sm'></ErrorMessage>
+
         </div>
 
-        <div className={styles.fieldContainer}>
+        <div className={`${styles.fieldContainer}`}>
           <Field
             as="textarea"
             name="notes"
@@ -55,17 +90,21 @@ const FormHandler = (params) => (
             style={{ resize: 'none' }}
           />
           <label htmlFor="notes" className={styles.floatingLabel}>ملاحظات</label>
-          <ErrorMessage name="notes" component="div" />
         </div>
 
+
         <hr className='border-t-2'/>
-        <button onClick={params.onNext} type="submit" className='"flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-xl hover:opacity-75' style={{backgroundColor:params.styles.primary}} disabled={isSubmitting}>
+        <button 
+        // onClick={params.onNext}
+        disabled
+        type="submit" className='"flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-xl hover:opacity-75' style={{backgroundColor:params.styles.primary}} disabled={isSubmitting}>
           التالي
         </button>
+        
       </Form>
 
     )}
-  </Formik>
-);
+  </Formik>)
+};
 
 export default FormHandler;

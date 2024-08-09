@@ -25,7 +25,8 @@
   }
   
   .fieldContainer input,
-  .fieldContainer textarea {
+  .fieldContainer textarea ,
+  .fieldContainer select{
     width: 100%;
     padding: 1.75rem 0.5rem 0.8rem;
     border-bottom: 1px solid #ccc;
