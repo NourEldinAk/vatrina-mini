@@ -57,7 +57,6 @@ const LocationForm = (params) => (
 
         <hr className='border-t-2'/>
         <button onClick={params.onNext}
-        disabled={isSubmitting || !isValid}
          type="submit"
           className='"flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-xl hover:opacity-75' style={{backgroundColor:params.styles.primary}} disabled={isSubmitting}>
           التالي
