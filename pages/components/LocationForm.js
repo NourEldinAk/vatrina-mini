@@ -182,6 +182,9 @@ const LocationForm = (params) => {
                               onChange={(event, value) => {
                                 setFieldValue('district', value ? value : '');
                               }}
+                              onInputChange={(event,value)=>{
+                                setFieldValue('district',value)
+                              }}
                               renderInput={(params) =>
                                 
                               <TextField 
@@ -189,12 +192,12 @@ const LocationForm = (params) => {
                                 sx={{width:"100%"}}
                                 label="اختر المنطقة" 
                                 error={touched.district && !!errors.district}
-                                helperText={touched.district && errors.district ? errors.district : ''}
+                                // helperText={touched.district && errors.district ? errors.district : ''}
                                 />
                               
                               }
                             />
-                            {/* <ErrorMessage name="district" component="div" className='text-red-500 text-sm mt-2' /> */}
+                            <ErrorMessage name="district" component="div" className='text-red-500 text-sm mt-2' />
                         </div>
                     }
 
