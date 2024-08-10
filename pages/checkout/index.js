@@ -9,6 +9,8 @@ import { selectCartTotal } from '@/stores/cart'
 import { useSelector } from 'react-redux'
 import { useRef, useState } from 'react'
 import LocationForm from '../components/LocationForm'
+import TransferForm from '../components/TransferForm'
+import PaymentForm from '../components/PaymentForm'
 
 export async function getServerSideProps(){
    const {styles} = await fetchStyles()
@@ -34,6 +36,21 @@ function Checkout({styles}) {
     setCurrentStep(step); 
     console.log(step)
   };
+
+  const renderStepComponent = () => {
+    switch (currentStep) {
+      case 0:
+        return <FormHandler onNext={handleGoToNext} styles={styles} />;
+      case 1:
+        return <LocationForm onNext={handleGoToNext} styles={styles} />;
+      case 2:
+        return <TransferForm onNext={handleGoToNext} styles={styles} />;
+      case 3:
+        return <PaymentForm onNext={handleGoToNext} styles={styles} />;
+      default:
+        return <div>Invalid step</div>; // Optional: Handle unexpected values
+    }
+  };
   
   return (
     <>
@@ -51,10 +68,7 @@ function Checkout({styles}) {
         <Steps ref={stepsRef} onStepChange={handleStepChange}/>
 
         <div className='mt-10 flex md:flex-row flex-col gap-8'>
-           {currentStep === 0? (
-             <FormHandler onNext={handleGoToNext} styles={styles}/>
-
-           ): (<LocationForm onNext={handleGoToNext} styles={styles}/>)}
+          {renderStepComponent()}
           <div className='md:w-1/2 -mt-14'>
 
           <CartItem/>

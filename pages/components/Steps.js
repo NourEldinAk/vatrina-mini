@@ -105,7 +105,7 @@ const Steps = forwardRef((props, ref) => {
               {activeStep !== 0 ? (
                   <>
                   <FontAwesomeIcon icon={faArrowRight} />
-                  {steps[activeStep]}
+                  {steps[activeStep-1]}
                 </>
 
               ):(<div></div>)}

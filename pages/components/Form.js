@@ -25,15 +25,12 @@ const FormHandler = (params) => {
     initialValues={{ countryCode: '+218', phone: '', name: '', notes: '' }}
     validationSchema={Yup.object({
       phone: Yup.string().required('ادخل رقم الهاتف')
+      .matches(/^\d+$/, 'يجب ادخال رقم صحيح')
       .min(9,'رقم الهاتف غير صحيح'),
       name: Yup.string().required('ادخل الاسم الكامل')
     })}
     onSubmit={async (values, { setSubmitting, validateForm }) => {
-        const errors = await validateForm();
-        if (Object.keys(errors).length === 0) {
           params.onNext(); 
-          console.log('Validation errors:', errors);
-        }
         setSubmitting(false);
       }}
   >
@@ -47,6 +44,7 @@ const FormHandler = (params) => {
             placeholder=" "
           />
           <label htmlFor="name" style={touched.name && errors.name ? {color:'red'} :{ color:'black'}} className={`${styles.floatingLabel} `} >الاسم الكامل</label>
+          
           <ErrorMessage component="div" name='name' className='text-red-500 text-sm mt-1'></ErrorMessage>
 
         </div>
@@ -68,8 +66,8 @@ const FormHandler = (params) => {
           </div>
           <div className={`${styles.fieldContainer} border-r-2 border-gray-300 w-1/4`}>
             <Field as="select" name="countryCode" className="px-2 py-4">
-              {countryCodes.map((option) => (
-                <option key={option.code} value={option.code}>
+              {countryCodes.map((option,index) => (
+                <option key={index} value={option.code}>
                   {option.country} ({option.code})
                 </option>
               ))}

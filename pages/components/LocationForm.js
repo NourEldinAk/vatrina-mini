@@ -6,46 +6,68 @@ import axios from 'axios';
 const LocationForm = (params) => {
     const [countries, setCountries] = useState([]);
     const [cities, setCities] = useState([]);
-    const [regions, setRegions] = useState([]);
-    const [selectedCountry, setSelectedCountry] = useState('');
+    const [districts, setDistricts] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState('ليبيا');
+    const [selectedCity , setSelectedCity] = useState('')
+    const [selectedDistrict , setSelectedDistrict] = useState('')
+
 
 
     useEffect(()=>{
-        axios.get('https://restcountries.com/v3.1/all?fields=name')
+        axios.get('https://api.vetrinas.ly/deliveryOptions')
         .then(response=>{
-            const countryOptions = response.data.map(country=>({
-                label: country.name.common,
-                value:country.name.value
+            const countryOptions = response.data.countries.map(country=>({
+                label: country.name,
+                value:country.name
             }))
             setCountries(countryOptions)
         }).catch(err=>console.error(err))
     },[])
 
+  
 
-    // useEffect(() => {
-    //     if (selectedCountry) {
-    //         axios.get('http://api.geonames.org/searchJSON', {
-    //             params: {
-    //                 country: selectedCountry,
-    //                 maxRows: 100,
-    //                 username: "noekatsu"
-    //             }
-    //         })
-    //         .then(response => {
-    //             const cityOptions = response.data.geonames.map(city => ({
-    //                 label: city.name,
-    //                 value: city.name
-    //             }));
-    //             setCities(cityOptions);
-    //         })
-    //         .catch(err => console.error(err));
-    //     } else {
-    //         setCities([]);
-    //     }
-    // }, [selectedCountry]);
+
+
+    useEffect(() => {
+        if (selectedCountry === 'ليبيا') {
+            axios.get('https://api.vetrinas.ly/deliveryOptions')
+            .then(response => {
+              const cityOptions = response.data.cities.map(city => ({
+                  label: city.name,
+                  value: city.name
+              }));
+              setCities(cityOptions);
+          })
+            .catch(err => console.error(err));
+        } else {
+            setCities([]);
+        }
+    }, [selectedCountry]);
+
+    useEffect(() => {
+      if (selectedCountry === 'ليبيا' && selectedCity) {
+          axios.get('https://api.vetrinas.ly/deliveryOptions')
+              .then(response => {
+                  const city = response.data.cities.find(city => city.name === selectedCity);
+                  if (city && city.districts) {
+                      const districtOptions = city.districts.map(district => ({
+                          label: district.name,
+                          value: district.name
+                      }));
+                      setDistricts(districtOptions);
+                  } else {
+                      setDistricts([]);
+                  }
+              })
+              .catch(err => console.error(err));
+      } else {
+          setDistricts([]);
+      }
+  }, [selectedCity, selectedCountry]);
+  
   return(
   <Formik
-    initialValues={{  country: '', city: '', address: '' }}
+    initialValues={{  country: 'ليبيا', city: '', address: '' }}
     validate={values => {
       const errors = {};
       if (!values.country) {
@@ -58,16 +80,14 @@ const LocationForm = (params) => {
       if (!values.address){
         errors.address = "ادخل العنوان"
       }
-      if(!values.region){
-        errors.region = 'ادخل المنطقة'
+      if(!values.district && districts.length>0){
+        errors.district = 'ادخل المنطقة'
       }
       return errors;
     }}
     onSubmit={(values,{ setSubmitting }) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400);
+      params.onNext();
+      setSubmitting(false);
     }}
   >
     {({ isSubmitting,values,errors,touched , setFieldValue}) => (
@@ -82,7 +102,7 @@ const LocationForm = (params) => {
 
             onChange={e => {
                 const country = e.target.value;
-                setFieldValue('country', );
+                setFieldValue('country', country);
                 setSelectedCountry(country);
             }}
           >
@@ -101,6 +121,11 @@ const LocationForm = (params) => {
             className="px-2 py-4"
             placeholder=" "
             as="select"
+            onChange ={e=>{
+              const city = e.target.value
+              setFieldValue('city',city)
+              setSelectedCity(city)
+            }}
           >
             <option value="">اختر المدينة</option>
             {cities.map((city,index)=>(
@@ -113,19 +138,26 @@ const LocationForm = (params) => {
           />
         </div>
 
-        {values.city && 
+        {values.city && districts.length>0 && 
         <div className={styles.fieldContainer}>
           <Field
             type="text"
-            name="region"
+            name="district"
             className="px-2 py-4"
             placeholder=" "
-          />
-          <label htmlFor="region" className={styles.floatingLabel}
-        style={errors.region && touched.region? {color:'text-red-500'}  : {color:'black'}} 
-
-          >المنطقة</label>
-          <ErrorMessage name="region" component="div" className='text-red-500 text-sm mt-2' 
+            as="select"
+            onChange={e=>{
+              const district = e.target.value;
+              setFieldValue('district',district)
+              setSelectedDistrict(district)
+            }}
+          >
+          <option value="">اختر المنطقة</option>
+          {districts.map((district,index)=>(
+            <option value={district.value} key={index}>{district.label}</option>
+          ))}
+          </Field>
+          <ErrorMessage name="district" component="div" className='text-red-500 text-sm mt-2' 
           />
         </div>}
 
@@ -144,7 +176,7 @@ const LocationForm = (params) => {
         </div>
 
         <hr className='border-t-2'/>
-        <button onClick={params.onNext} type="submit" className='"flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-xl hover:opacity-75' style={{backgroundColor:params.styles.primary}} disabled={isSubmitting}>
+        <button  type="submit" className='"flex items-center justify-center rounded-md border border-transparent bg-primary px-6 py-3 text-base font-medium text-white shadow-xl hover:opacity-75' style={{backgroundColor:params.styles.primary}} disabled={isSubmitting}>
           التالي
         </button>
       </Form>
