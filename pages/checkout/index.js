@@ -7,7 +7,7 @@ import FormHandler from '../components/Form'
 import CartItem from '../components/CartItem'
 import { selectCartTotal } from '@/stores/cart'
 import { useSelector } from 'react-redux'
-import { useRef, useState } from 'react'
+import { createContext, useRef, useState } from 'react'
 import LocationForm from '../components/LocationForm'
 import TransferForm from '../components/TransferForm'
 import PaymentForm from '../components/PaymentForm'
@@ -23,7 +23,17 @@ export async function getServerSideProps(){
 
 
 
+export const CheckoutContext = createContext([])
 function Checkout({styles}) {
+  
+  const [formData, setFormData] = useState({
+    personalInfo: {},
+    locationInfo: {},
+    transferMethod: '',
+    paymentDetails: {},
+ });
+
+
   const total = useSelector(selectCartTotal)
   const stepsRef = useRef(null)
   const [currentStep, setCurrentStep] = useState(0);
@@ -40,15 +50,15 @@ function Checkout({styles}) {
   const renderStepComponent = () => {
     switch (currentStep) {
       case 0:
-        return <FormHandler onNext={handleGoToNext} styles={styles} />;
+        return <FormHandler onNext={handleGoToNext} styles={styles} /> ;
       case 1:
         return <LocationForm onNext={handleGoToNext} styles={styles} />;
       case 2:
         return <TransferForm onNext={handleGoToNext} styles={styles} />;
       case 3:
-        return <PaymentForm onNext={handleGoToNext} styles={styles} />;
+        return   <PaymentForm onNext={handleGoToNext} styles={styles} /> ;
       default:
-        return <div>Invalid step</div>; // Optional: Handle unexpected values
+        return <div>Invalid step</div>; 
     }
   };
   
@@ -68,8 +78,10 @@ function Checkout({styles}) {
         <Steps ref={stepsRef} onStepChange={handleStepChange}/>
 
         <div className='mt-10 flex md:flex-row flex-col gap-8'>
-          {renderStepComponent()}
-          <div className='md:w-1/2 -mt-14'>
+            <CheckoutContext.Provider value={{ formData, setFormData }}>
+                {renderStepComponent()}
+            </CheckoutContext.Provider>  
+        <div className='md:w-1/2 -mt-14'>
 
           <CartItem/>
           <div className="flex justify-between text-base font-medium text-gray-900 px-10 my-6">

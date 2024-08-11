@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import styles from '../../styles/Form.module.css';
 import axios from 'axios';
+import { CheckoutContext } from '../checkout';
 
 
 
 const FormHandler = (params) => {
     const [countryCodes, setCountryCodes] = useState([])
+    const { formData, setFormData } = useContext(CheckoutContext);
+    const {personalInfo} = formData
 
     useEffect(()=>{
         axios.get('https://restcountries.com/v3.1/all?fields=idd,name')
@@ -22,19 +25,30 @@ const FormHandler = (params) => {
     },[])
   return (
   <Formik
-    initialValues={{ countryCode: '+218', phone: '', name: '', notes: '' }}
+    initialValues={{
+      countryCode: personalInfo?.countryCode||'+218',
+      phone: personalInfo?.phone,
+      name: personalInfo?.name,
+      notes: personalInfo?.notes }}
     validationSchema={Yup.object({
       phone: Yup.string().required('ادخل رقم الهاتف')
       .matches(/^\d+$/, 'يجب ادخال رقم صحيح')
       .min(9,'رقم الهاتف غير صحيح'),
       name: Yup.string().required('ادخل الاسم الكامل')
     })}
-    onSubmit={async (values, { setSubmitting, validateForm }) => {
+    onSubmit={async (values, { setSubmitting }) => {
+      setFormData({
+        ...formData,
+        locationInfo: {
+          ...formData.locationInfo,
+            ...values
+        }
+      });
           params.onNext(); 
         setSubmitting(false);
       }}
   >
-    {({ isSubmitting, values,touched,errors}) => (
+    {({ isSubmitting, values,touched,errors,setFieldValue}) => (
       <Form className='flex flex-col md:w-1/2  gap-4 text-bold text-black'>
         <div className={styles.fieldContainer} >
           <Field
@@ -65,7 +79,12 @@ const FormHandler = (params) => {
          
           </div>
           <div className={`${styles.fieldContainer} border-r-2 border-gray-300 w-1/4`}>
-            <Field as="select" name="countryCode" className="px-2 py-4">
+            <Field as="select" name="countryCode" className="px-2 py-4"
+            onChange={(e)=> {
+              setFieldValue('countryCode',e.target.value)
+            }}
+
+            >
               {countryCodes.map((option,index) => (
                 <option key={index} value={option.code}>
                   {option.country} ({option.code})
