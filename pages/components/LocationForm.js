@@ -15,7 +15,7 @@ const LocationForm = (params) => {
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState(locationInfo?.country || 'ليبيا');
-    const [selectedCity, setSelectedCity] = useState(locationInfo?.city || null);
+    const [selectedCity, setSelectedCity] = useState(locationInfo?.city || '');
 
 
 
@@ -48,6 +48,8 @@ const LocationForm = (params) => {
             setCities([]);
         }
     }, [selectedCountry]);
+
+  
 
     useEffect(() => {
         if (selectedCountry === 'ليبيا') {
@@ -93,19 +95,19 @@ const LocationForm = (params) => {
                 }
                 return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={async(values, { setSubmitting }) => {
 
               setFormData({
                 ...formData,
                 locationInfo:{
-                  ...formData.values,
+                  ...formData.locationInfo,
                   ...values
                 }
               })
 
-                params.onNext();
-                console.log(formData)
-                setSubmitting(false);
+              console.log(formData)
+              setSubmitting(false);
+              params.onNext();
             }}
         >
             {({ isSubmitting, values, errors, touched, setFieldValue }) => (

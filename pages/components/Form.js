@@ -27,23 +27,26 @@ const FormHandler = (params) => {
   <Formik
     initialValues={{
       countryCode: personalInfo?.countryCode||'+218',
-      phone: personalInfo?.phone,
-      name: personalInfo?.name,
-      notes: personalInfo?.notes }}
+      phone: personalInfo?.phone || '',
+      name: personalInfo?.name || '',
+      notes: personalInfo?.notes || ''
+    
+    }}
     validationSchema={Yup.object({
       phone: Yup.string().required('ادخل رقم الهاتف')
       .matches(/^\d+$/, 'يجب ادخال رقم صحيح')
       .min(9,'رقم الهاتف غير صحيح'),
       name: Yup.string().required('ادخل الاسم الكامل')
     })}
-    onSubmit={async (values, { setSubmitting }) => {
+    onSubmit={ async(values, { setSubmitting }) => {
       setFormData({
         ...formData,
-        locationInfo: {
-          ...formData.locationInfo,
+        personalInfo: {
+          ...formData.personalInfo,
             ...values
         }
       });
+      console.log(formData)
           params.onNext(); 
         setSubmitting(false);
       }}

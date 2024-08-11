@@ -18,8 +18,8 @@ function PaymentForm({param}) {
     <div className='text-gray-500 text-2xl'>
       <h1 className='text-3xl mb-5'>العنوان </h1>
       <p className=''>الدولة : {locationInfo.country}</p>
-      <p className=''>المدينة : {locationInfo.city}</p>
-      <p className=''>المنطقة : {locationInfo.district  || ""}</p>
+      <p className=''>المدينة : {locationInfo.city.value}</p>
+      <p className=''>المنطقة : {locationInfo.district.value  || ""}</p>
       <p className=''>العنوان : {locationInfo.address}</p>
 
     </div>
