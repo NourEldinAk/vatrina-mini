@@ -79,7 +79,7 @@ const FormHandler = (params) => {
             />
             
             <label htmlFor="phone" className={styles.floatingLabel} style={touched.phone && errors.phone ? {color:'red'} :{ color:'black'}} >رقم الهاتف</label>
-         
+
           </div>
           <div className={`${styles.fieldContainer} border-r-2 border-gray-300 w-1/4`}>
             <Field as="select" name="countryCode" className="px-2 py-4"

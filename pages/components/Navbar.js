@@ -74,6 +74,9 @@ export default function PrimarySearchAppBar({styles,siteName}) {
   const handleClick = ()=>{
     router.push('/cart')
   }
+  const handleAuthClicked=()=>{
+    router.push('/auth')
+  }
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -208,6 +211,7 @@ export default function PrimarySearchAppBar({styles,siteName}) {
               </Badge>
             </IconButton>
             <IconButton
+              onClick={handleAuthClicked}
               size="large"
               edge="end"
               aria-label="account of current user"
