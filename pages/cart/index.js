@@ -8,6 +8,7 @@ import Layout from '../components/Layout'
 import axios from 'axios'
 import { fetchStyles } from '@/utils/getStyles'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export async function getServerSideProps() {
   const {styles, siteName} = await fetchStyles()
@@ -23,6 +24,13 @@ function CartPage({styles,siteName}) {
   
   const items = useSelector(store=> store.cart.items)
   const total = useSelector(selectCartTotal)
+  const router = useRouter()
+  useEffect(()=>{
+    const jwt = sessionStorage.getItem('jwt')
+    if(!jwt){
+      router.push('/auth')
+    }
+  },[router])
 
   // useEffect(()=>{
   //   let total =0;

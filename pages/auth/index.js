@@ -1,10 +1,14 @@
 import { fetchStyles } from '@/utils/getStyles'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Field, Form, Formik } from 'formik'
 import formStyles from '../../styles/Form.module.css';
-import Link from 'next/link';
 import * as Yup from 'yup'
+import { useRouter } from 'next/navigation';
+import { fetchUser,postUser } from '@/lib/userProvider';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { Bounce, ToastContainer } from 'react-toastify';
 export async function getServerSideProps(){
     const {styles , siteName} = await fetchStyles()
     return {
@@ -25,14 +29,24 @@ function Index({styles, siteName}) {
     const registerValidationSchema = Yup.object({
       name: Yup.string('ادخل الاسم').required('يجب ادخال الاسم').max(10),
       email:Yup.string('ادخل الايميل').email('بريد الالكتروني غير صالح').required('يجب ادخال البريد الالكتروني'),
-      phone: Yup.string().required('يجب ادخال رقم الهاتف')
-      .matches(/^\d+$/, 'يجب ادخال رقم صحيح')
-      .min(9,'رقم الهاتف غير صحيح'),
+      phone: Yup.string()
+      .required('يجب ادخال رقم الهاتف')
+      .matches(/^\+?\d+$/, 'يجب ادخال رقم صحيح')
+      .min(9, 'رقم الهاتف غير صحيح'),
       password: Yup.string().required('يجب ادخال كلمة المرور').min(8,'يجب ان تتكون كلمة المرور من 8 احرف علي الاقل'),
       confirmPassword: Yup.string().required('يجب ادخال كلمة المرور مرة اخرى')
       .oneOf([Yup.ref('password'),null],'يجب ان تتطابق كلمات الامرور')
 
     })
+
+    const router = useRouter()
+
+    useEffect(()=>{
+      const jwt = sessionStorage.getItem('vatrinaJwt')
+      if(jwt){
+        router.push('/')
+      }
+    },[router])
 
   return (
     <>
@@ -48,8 +62,18 @@ function Index({styles, siteName}) {
                 { name: '', email: '', phone: '', password: '', confirmPassword: '' }}
 
             validationSchema={formType === "LogIn" ? loginValidationSchema : registerValidationSchema}
-            onSubmit={values => {
-              console.log(values)
+            async onSubmit={async (values) => {
+              if (formType === "LogIn"){
+                await fetchUser(values)
+              }else{
+                await postUser(values) 
+              }
+
+              const jwt = sessionStorage.getItem('vatrinaJwt');
+              if (jwt) {
+                router.push('/');
+              }
+
             }}
           >
             {({errors,touched , resetForm}) => (
@@ -129,6 +153,17 @@ function Index({styles, siteName}) {
                       العودة إلى تسجيل الدخول
                     </button>
                   )}
+                    <ToastContainer 
+                    
+                    position="bottom-right"
+                    autoClose={3000}
+                    transition={Bounce}
+
+                    hideProgressBar={false}
+                    closeOnClick  
+                    theme="dark"
+                    />
+
                 </div>
               </Form>
             )}

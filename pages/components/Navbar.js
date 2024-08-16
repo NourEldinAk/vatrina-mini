@@ -69,6 +69,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar({styles,siteName}) {
   // const { styles, siteName } = useStyle();
 
+  const user = JSON.parse(sessionStorage.getItem('vatrinaUser'))
+  console.log("usser" , user)
+
   const items = useSelector(store=>store.cart.items)
   const router = useRouter()
   const handleClick = ()=>{
@@ -85,6 +88,10 @@ export default function PrimarySearchAppBar({styles,siteName}) {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+  const handleLogout = ()=>{
+    sessionStorage.clear()
+    router.push('/auth')
+  }
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -145,12 +152,13 @@ export default function PrimarySearchAppBar({styles,siteName}) {
           color="inherit"
         >
           <Badge badgeContent={items.length} color="error">
-            <ShoppingCartIcon></ShoppingCartIcon>
+            <ShoppingCartIcon className='h-10 w-10'></ShoppingCartIcon>
           </Badge>
         </IconButton>
         <p style={{color:'#999'}}>المشتريات</p>
       </MenuItem>
-      <MenuItem >
+      {!user &&
+        <MenuItem >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -158,10 +166,12 @@ export default function PrimarySearchAppBar({styles,siteName}) {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircle fontSize="large"/>
         </IconButton>
         <p style={{color:'#999'}}>الحساب الشخصي</p>
       </MenuItem>
+      }
+      
     </Menu>
   );
 
@@ -183,8 +193,13 @@ export default function PrimarySearchAppBar({styles,siteName}) {
       
         <Toolbar >
 
+          <div className='flex gap-4 items-center justify-center'>
 
-          <Link className='md:text-3xl text-sm ' href='/'>{siteName}</Link>
+          {user && 
+          <button  onClick={handleLogout} className='py-2 px-1 md:py-2 md:px-4  border-2 border-orange-400 text-orange-400 hover:opacity-60 hover:scale-90 transition-all ease-in-out bg-white text-xs md:text-xl font-bold'>تسجيل الخروج</button>
+        }
+        <Link className='md:text-3xl text-sm ' href='/'>{user ? user.username : siteName}</Link>
+          </div>
           <Box sx={{ flexGrow: 1 }} />
 
           <Search >
@@ -207,20 +222,23 @@ export default function PrimarySearchAppBar({styles,siteName}) {
               color="inherit"
             >
               <Badge badgeContent={items.length} color="error" >
-                <ShoppingCartIcon></ShoppingCartIcon>
+                <ShoppingCartIcon fontSize="large" ></ShoppingCartIcon>
               </Badge>
             </IconButton>
+            {!user &&
             <IconButton
-              onClick={handleAuthClicked}
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            onClick={handleAuthClicked}
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <  AccountCircle fontSize="large"/>
+          </IconButton>
+            }
+            
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' , marginRight:'10px'} }}>
             <IconButton

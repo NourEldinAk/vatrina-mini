@@ -10,6 +10,10 @@ const nextConfig = {
       },
     ],
   },
+  env: {
+    STRAPI_URL: process.env.STRAPI_URL,
+    STRAPI_TOKEN: process.env.STRAPI_TOKEN
+},
 };
 
   
