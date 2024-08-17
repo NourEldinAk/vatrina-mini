@@ -2,8 +2,20 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../utils/axiosInstance'
 import Card from '../components/Card'
+import Layout from '../components/Layout'
+import { fetchStyles } from '@/utils/getStyles'
 
-function Page() {
+export async function getServerSideProps(){
+  const {styles , siteName} = await fetchStyles()
+  return {
+    props:{
+      styles,
+      siteName
+    }
+  }
+}
+
+function Page({styles,siteName}) {
     const [products, setProducts] = useState([])
     useEffect(()=>{
         axios.get('/topCategories').then((response)=>{
@@ -16,6 +28,7 @@ function Page() {
     },[products])
   return (
     <>
+    <Layout styles={styles} siteName={siteName}>
     <div className='mx-10 md:px-16 px-4 pb-10 mt-10' >
             <div 
       className='font-bold  mb-10 justify-between flex  text-[#ddb35f]'>
@@ -31,6 +44,7 @@ function Page() {
   
       </div>
     </div>
+    </Layout>
     </>
   )
 }
