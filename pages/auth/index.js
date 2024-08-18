@@ -57,6 +57,7 @@ function Index({styles, siteName}) {
             {formType === 'LogIn' ? 'تسجيل الدخول' : 'إنشاء حساب'}
           </h1>
           <Formik
+            enableReinitialize
             initialValues={formType === 'LogIn' ?
                { email: '', password: '' } :
                 { name: '', email: '', phone: '', password: '', confirmPassword: '' }}
