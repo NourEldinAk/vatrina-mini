@@ -69,8 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function PrimarySearchAppBar({styles,siteName}) {
   // const { styles, siteName } = useStyle();
 
-  const user = JSON.parse(sessionStorage.getItem('vatrinaUser'))
-  console.log("usser" , user)
+const user =  JSON.parse(sessionStorage.getItem('vatrinaUser') );
 
   const items = useSelector(store=>store.cart.items)
   const router = useRouter()
@@ -198,7 +197,7 @@ export default function PrimarySearchAppBar({styles,siteName}) {
           {user && 
           <button  onClick={handleLogout} className='py-2 px-1 md:py-2 md:px-4  border-2 border-orange-400 text-orange-400 hover:opacity-60 hover:scale-90 transition-all ease-in-out bg-white text-xs md:text-xl font-bold'>تسجيل الخروج</button>
         }
-        <Link className='md:text-3xl text-sm ' href='/'>{user ? user.username : siteName}</Link>
+        <Link className='md:text-3xl text-sm ' href='/'>{user ? user.name : siteName}</Link>
           </div>
           <Box sx={{ flexGrow: 1 }} />
 

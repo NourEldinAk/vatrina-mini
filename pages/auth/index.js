@@ -27,7 +27,7 @@ function Index({styles, siteName}) {
       password: Yup.string('ادخل كلمة المرور').required('يجب ادخال كلمة المرور')
            })
     const registerValidationSchema = Yup.object({
-      name: Yup.string('ادخل الاسم').required('يجب ادخال الاسم').max(10),
+      name: Yup.string('ادخل الاسم').required('يجب ادخال الاسم').max(30),
       email:Yup.string('ادخل الايميل').email('بريد الالكتروني غير صالح').required('يجب ادخال البريد الالكتروني'),
       phone: Yup.string()
       .required('يجب ادخال رقم الهاتف')

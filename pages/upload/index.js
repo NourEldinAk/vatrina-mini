@@ -38,7 +38,7 @@ const handleSubmit = async (e)=>{
     console.log(sessionStorage.getItem('vatrinaJwt'))
 
     try{
-    const response =  await axios.post(`${process.env.STRAPI_URL}/api/upload`,formData,{
+    const response =  await axios.post(`${process.env.BACKEND_URL}/api/upload`,formData,{
         headers:{
             'Content-Type' : 'multipart/form-data',
             Authorization: `Bearer ${sessionStorage.getItem('vatrinaJwt')}`
