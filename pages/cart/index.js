@@ -26,7 +26,7 @@ function CartPage({styles,siteName}) {
   const total = useSelector(selectCartTotal)
   const router = useRouter()
   useEffect(()=>{
-    const jwt = sessionStorage.getItem('jwt')
+    const jwt = sessionStorage.getItem('vatrinaJwt')
     if(!jwt){
       router.push('/auth')
     }
